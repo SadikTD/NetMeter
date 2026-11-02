@@ -1,0 +1,240 @@
+<Page x:Class="NetMeter.Pages.WidgetPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:local="clr-namespace:NetMeter"
+      Title="Taskbar widget">
+    <Page.Resources>
+        <Style TargetType="ui:CardControl" BasedOn="{StaticResource {x:Type ui:CardControl}}">
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="Padding" Value="16,12" />
+        </Style>
+        <Style x:Key="Field" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="SelectedValuePath" Value="Tag" />
+        </Style>
+    </Page.Resources>
+
+    <StackPanel Margin="32,8,32,32" MaxWidth="900" HorizontalAlignment="Left">
+        <DockPanel>
+            <ui:Button DockPanel.Dock="Right" VerticalAlignment="Top" Content="Reset widget"
+                       Icon="{ui:SymbolIcon ArrowSync24}" Click="Reset_Click" />
+            <TextBlock Text="Taskbar widget" Style="{StaticResource PageTitle}" />
+        </DockPanel>
+
+        <!-- Live preview -->
+        <ui:Card Padding="18,16">
+            <StackPanel>
+                <DockPanel Margin="0,0,0,12">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                        <RadioButton x:Name="DarkPreview" Content="Dark taskbar" GroupName="tb" IsChecked="True"
+                                     Checked="PreviewTheme_Changed" Margin="0,0,8,0" />
+                        <RadioButton Content="Light taskbar" GroupName="tb" Checked="PreviewTheme_Changed" />
+                    </StackPanel>
+                    <TextBlock Text="Live preview" FontWeight="SemiBold" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DockPanel>
+                <Border x:Name="Strip" Height="48" CornerRadius="6" ClipToBounds="True">
+                    <DockPanel Margin="14,0">
+                        <TextBlock x:Name="FakeClock" DockPanel.Dock="Right" VerticalAlignment="Center" TextAlignment="Right"
+                                   FontFamily="Segoe UI Variable Small" FontSize="12" LineHeight="17" />
+                        <StackPanel x:Name="FakeTray" DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,18,0" />
+                        <local:MeterView x:Name="Preview" HorizontalAlignment="Right" Margin="0,0,14,0" />
+                    </DockPanel>
+                </Border>
+                <DockPanel Margin="0,12,0,0">
+                    <ui:ToggleSwitch DockPanel.Dock="Right" IsChecked="{local:Set ShowMeter}" Content="Show on taskbar" />
+                    <TextBlock x:Name="HotkeyHint" Style="{StaticResource Caption}" VerticalAlignment="Center" />
+                </DockPanel>
+            </StackPanel>
+        </ui:Card>
+
+        <!-- Presets -->
+        <TextBlock Text="Styles" Style="{StaticResource Section}" />
+        <ItemsControl x:Name="PresetList">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3" Margin="-4,0" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <!-- Content -->
+        <TextBlock Text="What to show" Style="{StaticResource Section}" />
+        <ui:Card Padding="16,12" Margin="0,0,0,4">
+            <StackPanel>
+                <TextBlock Text="Ticked items appear in this order. With two rows they fill top, then bottom, column by column."
+                           Style="{StaticResource RowHint}" Margin="0,0,0,8" />
+                <ItemsControl x:Name="ItemsList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="0,2">
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                    <ui:Button Icon="{ui:SymbolIcon ArrowUp24}" Tag="{Binding}" Click="MoveUp_Click"
+                                               Appearance="Transparent" Padding="6" ToolTip="Move up" />
+                                    <ui:Button Icon="{ui:SymbolIcon ArrowDown24}" Tag="{Binding}" Click="MoveDown_Click"
+                                               Appearance="Transparent" Padding="6" ToolTip="Move down" />
+                                </StackPanel>
+                                <CheckBox IsChecked="{local:Set Enabled}" Content="{Binding Label}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ui:Card>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Text="Two rows" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="Stack download over upload, like the clock. Off puts everything on one line." Style="{StaticResource RowHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{local:Set Stacked}" />
+        </ui:CardControl>
+
+        <!-- Text -->
+        <TextBlock Text="Text" Style="{StaticResource Section}" />
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Text="Font" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="Segoe UI Variable Small matches the taskbar clock." Style="{StaticResource RowHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ComboBox x:Name="FontBox" Width="260" IsEditable="True" Text="{local:Set FontFamily}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontFamily="{Binding}" FontSize="14" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </ui:CardControl>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <TextBlock Text="Size" Style="{StaticResource RowTitle}" />
+            </ui:CardControl.Header>
+            <ui:NumberBox Value="{local:Set FontSize}" Minimum="8" Maximum="24" SmallChange="0.5" MaxDecimalPlaces="1" Width="140" />
+        </ui:CardControl>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <TextBlock Text="Weight" Style="{StaticResource RowTitle}" />
+            </ui:CardControl.Header>
+            <ComboBox Style="{StaticResource Field}" SelectedValue="{local:Set FontWeight}">
+                <ComboBoxItem Content="Light" Tag="Light" />
+                <ComboBoxItem Content="Regular" Tag="Normal" />
+                <ComboBoxItem Content="Medium" Tag="Medium" />
+                <ComboBoxItem Content="Semibold" Tag="SemiBold" />
+                <ComboBoxItem Content="Bold" Tag="Bold" />
+            </ComboBox>
+        </ui:CardControl>
+
+        <!-- Format -->
+        <TextBlock Text="Format" Style="{StaticResource Section}" />
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <TextBlock Text="Icons" Style="{StaticResource RowTitle}" />
+            </ui:CardControl.Header>
+            <ComboBox Style="{StaticResource Field}" SelectedValue="{local:Set Icons}">
+                <ComboBoxItem Content="Thin arrows" Tag="Arrows" />
+                <ComboBoxItem Content="Chevrons" Tag="Chevrons" />
+                <ComboBoxItem Content="Download / upload trays" Tag="Tray" />
+                <ComboBoxItem Content="Letters (D, U)" Tag="Letters" />
+                <ComboBoxItem Content="No icons" Tag="None" />
+            </ComboBox>
+        </ui:CardControl>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Text="Show bits instead of bytes" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="ISPs advertise in bits: 8 Mb/s is 1 MB/s." Style="{StaticResource RowHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{local:Set Bits}" />
+        </ui:CardControl>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <TextBlock Text="Unit label" Style="{StaticResource RowTitle}" />
+            </ui:CardControl.Header>
+            <ComboBox Style="{StaticResource Field}" SelectedValue="{local:Set UnitStyle}">
+                <ComboBoxItem Content="MB/s" Tag="Full" />
+                <ComboBoxItem Content="MB" Tag="Short" />
+                <ComboBoxItem Content="M" Tag="Compact" />
+            </ComboBox>
+        </ui:CardControl>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Text="Decimals" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="Always one keeps the width steady." Style="{StaticResource RowHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ComboBox Style="{StaticResource Field}" SelectedValue="{local:Set Decimals}">
+                <ComboBoxItem Content="Always one (19.2)" Tag="One" />
+                <ComboBoxItem Content="Only below 10 (9.4, 19)" Tag="Auto" />
+                <ComboBoxItem Content="None (19)" Tag="None" />
+            </ComboBox>
+        </ui:CardControl>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Text="Soften units" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="Draw MB/s, ms and GB lighter so the numbers stand out." Style="{StaticResource RowHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{local:Set DimUnits}" />
+        </ui:CardControl>
+
+        <!-- Colors -->
+        <TextBlock Text="Color" Style="{StaticResource Section}" />
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <TextBlock Text="Color style" Style="{StaticResource RowTitle}" />
+            </ui:CardControl.Header>
+            <ComboBox Style="{StaticResource Field}" SelectedValue="{local:Set ColorMode}">
+                <ComboBoxItem Content="Monochrome" Tag="Mono" />
+                <ComboBoxItem Content="Colored icons" Tag="Icons" />
+                <ComboBoxItem Content="Colored text" Tag="Text" />
+            </ComboBox>
+        </ui:CardControl>
+        <ui:Card Padding="16,12" Margin="0,0,0,4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Custom colors" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="Pick a swatch or type a hex like #7FE0BC. Empty means automatic for a light or dark taskbar."
+                               Style="{StaticResource RowHint}" Margin="0,2,24,0" />
+                </StackPanel>
+                <ItemsControl x:Name="ColorRows" Grid.Column="1" />
+            </Grid>
+        </ui:Card>
+
+        <!-- Position -->
+        <TextBlock Text="Position" Style="{StaticResource Section}" />
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Text="Nudge" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="Move left (negative) or right in pixels if it overlaps something." Style="{StaticResource RowHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:NumberBox Value="{local:Set OffsetX}" Minimum="-2000" Maximum="400" SmallChange="2" MaxDecimalPlaces="0" Width="140" />
+        </ui:CardControl>
+        <ui:CardControl>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Text="Hide during fullscreen apps" Style="{StaticResource RowTitle}" />
+                    <TextBlock Text="Games, videos and presentations on the main screen." Style="{StaticResource RowHint}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{local:Set HideInFullscreen}" />
+        </ui:CardControl>
+    </StackPanel>
+</Page>

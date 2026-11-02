@@ -1,0 +1,96 @@
+<Page x:Class="NetMeter.Pages.OverviewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:local="clr-namespace:NetMeter"
+      Title="Overview">
+    <StackPanel Margin="32,8,32,32">
+        <TextBlock Text="Overview" Style="{StaticResource PageTitle}" />
+
+        <UniformGrid Columns="4" Margin="-6,0">
+            <ui:Card Margin="6" Padding="18,16" VerticalAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="ArrowDownload24" Foreground="{StaticResource DownBrush}" FontSize="16" />
+                        <TextBlock Text="  Download" Style="{StaticResource Caption}" />
+                    </StackPanel>
+                    <TextBlock x:Name="DownText" Style="{StaticResource BigNumber}" Margin="0,6,0,2" />
+                    <TextBlock x:Name="DownPeak" Style="{StaticResource Caption}" TextWrapping="Wrap" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="18,16" VerticalAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="ArrowUpload24" Foreground="{StaticResource UpBrush}" FontSize="16" />
+                        <TextBlock Text="  Upload" Style="{StaticResource Caption}" />
+                    </StackPanel>
+                    <TextBlock x:Name="UpText" Style="{StaticResource BigNumber}" Margin="0,6,0,2" />
+                    <TextBlock x:Name="UpPeak" Style="{StaticResource Caption}" TextWrapping="Wrap" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="18,16" VerticalAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="Pulse24" Foreground="{StaticResource PingBrush}" FontSize="16" />
+                        <TextBlock x:Name="PingLabel" Text="  Ping" Style="{StaticResource Caption}" />
+                    </StackPanel>
+                    <TextBlock x:Name="PingText" Style="{StaticResource BigNumber}" Margin="0,6,0,2" />
+                    <TextBlock x:Name="PingSub" Style="{StaticResource Caption}" TextWrapping="Wrap" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="18,16" VerticalAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="DataUsage24" FontSize="16" />
+                        <TextBlock Text="  Used today" Style="{StaticResource Caption}" />
+                    </StackPanel>
+                    <TextBlock x:Name="TodayText" Style="{StaticResource BigNumber}" Margin="0,6,0,2" />
+                    <TextBlock x:Name="TodaySub" Style="{StaticResource Caption}" TextWrapping="Wrap" />
+                </StackPanel>
+            </ui:Card>
+        </UniformGrid>
+
+        <ui:Card Margin="0,12,0,0" Padding="18,14">
+            <StackPanel>
+                <DockPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                        <Ellipse Width="8" Height="8" Fill="{StaticResource DownBrush}" />
+                        <TextBlock Text=" Download     " Style="{StaticResource Caption}" />
+                        <Ellipse Width="8" Height="8" Fill="{StaticResource UpBrush}" />
+                        <TextBlock Text=" Upload" Style="{StaticResource Caption}" />
+                    </StackPanel>
+                    <TextBlock Text="Live speed · last 5 minutes" FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                </DockPanel>
+                <local:Chart x:Name="LiveChart" Height="230" Margin="0,12,0,0" />
+            </StackPanel>
+        </ui:Card>
+
+        <DockPanel Margin="0,22,0,8">
+            <ui:Button DockPanel.Dock="Right" Content="Refresh" Icon="{ui:SymbolIcon ArrowSync24}" Click="Refresh_Click" />
+            <TextBlock Text="Connection" Style="{StaticResource Section}" Margin="0" VerticalAlignment="Center" />
+        </DockPanel>
+        <ui:Card Padding="18,12">
+            <ItemsControl x:Name="InfoList">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="130" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Key}" Style="{StaticResource Caption}" FontSize="13" />
+                            <TextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" Margin="0,0,16,0"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ui:Card>
+    </StackPanel>
+</Page>

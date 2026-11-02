@@ -1,0 +1,43 @@
+<ui:FluentWindow x:Class="NetMeter.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:pages="clr-namespace:NetMeter.Pages"
+                 Title="NetMeter"
+                 Width="1120" Height="760" MinWidth="860" MinHeight="580"
+                 WindowStartupLocation="CenterScreen"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="Mica"
+                 WindowCornerPreference="Round">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="NetMeter">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/NetMeter.ico" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <ui:NavigationView x:Name="Nav" Grid.Row="1"
+                           PaneDisplayMode="Left"
+                           OpenPaneLength="210"
+                           IsBackButtonVisible="Collapsed"
+                           IsPaneToggleVisible="True">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="Overview" Icon="{ui:SymbolIcon Gauge24}" TargetPageType="{x:Type pages:OverviewPage}" />
+                <ui:NavigationViewItem Content="Taskbar widget" Icon="{ui:SymbolIcon PaintBrush24}" TargetPageType="{x:Type pages:WidgetPage}" />
+                <ui:NavigationViewItem Content="Data usage" Icon="{ui:SymbolIcon DataHistogram24}" TargetPageType="{x:Type pages:UsagePage}" />
+                <ui:NavigationViewItem Content="Ping" Icon="{ui:SymbolIcon Pulse24}" TargetPageType="{x:Type pages:PingPage}" />
+                <ui:NavigationViewItem Content="Speed test" Icon="{ui:SymbolIcon TopSpeed24}" TargetPageType="{x:Type pages:SpeedTestPage}" />
+                <ui:NavigationViewItem Content="Apps" Icon="{ui:SymbolIcon AppsList24}" TargetPageType="{x:Type pages:AppsPage}" />
+                <ui:NavigationViewItem Content="Events" Icon="{ui:SymbolIcon History24}" TargetPageType="{x:Type pages:EventsPage}" />
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Content="Settings" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:SettingsPage}" />
+            </ui:NavigationView.FooterMenuItems>
+        </ui:NavigationView>
+    </Grid>
+</ui:FluentWindow>

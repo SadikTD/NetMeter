@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Only the UI-free logic is shared, so the checks run anywhere with plain `dotnet run`. -->
+    <Compile Include="..\NetMeter\Logic.cs" Link="Logic.cs" />
+  </ItemGroup>
+</Project>

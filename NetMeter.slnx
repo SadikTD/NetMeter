@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="NetMeter.Tests/NetMeter.Tests.csproj" />
+  <Project Path="NetMeter/NetMeter.csproj" />
+</Solution>

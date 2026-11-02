@@ -1,0 +1,68 @@
+<Page x:Class="NetMeter.Pages.PingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:local="clr-namespace:NetMeter"
+      Title="Ping">
+    <StackPanel Margin="32,8,32,32">
+        <TextBlock Text="Ping" Style="{StaticResource PageTitle}" />
+
+        <ui:Card Padding="18,12" Margin="0,0,0,12">
+            <DockPanel>
+                <ui:Button x:Name="ApplyButton" DockPanel.Dock="Right" Content="Apply" Appearance="Primary"
+                           Margin="8,0,0,0" Click="Apply_Click" />
+                <TextBlock Text="Host" VerticalAlignment="Center" Margin="0,0,12,0"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                <ComboBox x:Name="HostBox" IsEditable="True" Width="260" HorizontalAlignment="Left">
+                    <ComboBoxItem Content="1.1.1.1" ToolTip="Cloudflare DNS" />
+                    <ComboBoxItem Content="8.8.8.8" ToolTip="Google DNS" />
+                    <ComboBoxItem Content="151.106.246.1" ToolTip="Riot Games, Mumbai" />
+                </ComboBox>
+                <TextBlock Style="{StaticResource Caption}" VerticalAlignment="Center" Margin="12,0,0,0"
+                           Text="Any IP or host name. 151.106.246.1 is Riot's Mumbai route." />
+            </DockPanel>
+        </ui:Card>
+
+        <UniformGrid Columns="5" Margin="-6,0">
+            <ui:Card Margin="6" Padding="16,12">
+                <StackPanel>
+                    <TextBlock Text="Now" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="NowText" Style="{StaticResource BigNumber}" FontSize="24" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="16,12">
+                <StackPanel>
+                    <TextBlock Text="Average" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="AvgText" Style="{StaticResource BigNumber}" FontSize="24" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="16,12">
+                <StackPanel>
+                    <TextBlock Text="Min / max" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="MinMaxText" Style="{StaticResource BigNumber}" FontSize="24" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="16,12">
+                <StackPanel>
+                    <TextBlock Text="Jitter" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="JitterText" Style="{StaticResource BigNumber}" FontSize="24" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="16,12">
+                <StackPanel>
+                    <TextBlock Text="Packet loss" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="LossText" Style="{StaticResource BigNumber}" FontSize="24" />
+                </StackPanel>
+            </ui:Card>
+        </UniformGrid>
+
+        <ui:Card Margin="0,12,0,0" Padding="18,14">
+            <StackPanel>
+                <TextBlock x:Name="ChartTitle" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                <local:Chart x:Name="PingChart" Height="260" Margin="0,12,0,0" />
+                <TextBlock Style="{StaticResource Caption}" Margin="0,8,0,0"
+                           Text="Gaps are lost pings. Stats cover the last 60 pings. Spikes above your alert limit are saved in Events." />
+            </StackPanel>
+        </ui:Card>
+    </StackPanel>
+</Page>

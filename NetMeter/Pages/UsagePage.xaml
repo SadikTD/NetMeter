@@ -1,0 +1,72 @@
+<Page x:Class="NetMeter.Pages.UsagePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:local="clr-namespace:NetMeter"
+      Title="Data usage">
+    <StackPanel Margin="32,8,32,32">
+        <DockPanel>
+            <ui:Button DockPanel.Dock="Right" VerticalAlignment="Top" Content="Export CSV"
+                       Icon="{ui:SymbolIcon ArrowDownload24}" Click="Export_Click" />
+            <TextBlock Text="Data usage" Style="{StaticResource PageTitle}" />
+        </DockPanel>
+
+        <UniformGrid Columns="4" Margin="-6,0">
+            <ui:Card Margin="6" Padding="18,14">
+                <StackPanel>
+                    <TextBlock Text="Today" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="TodayText" Style="{StaticResource BigNumber}" FontSize="24" Margin="0,4,0,0" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="18,14">
+                <StackPanel>
+                    <TextBlock Text="Last 7 days" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="WeekText" Style="{StaticResource BigNumber}" FontSize="24" Margin="0,4,0,0" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="18,14">
+                <StackPanel>
+                    <TextBlock Text="This month" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="MonthText" Style="{StaticResource BigNumber}" FontSize="24" Margin="0,4,0,0" />
+                </StackPanel>
+            </ui:Card>
+            <ui:Card Margin="6" Padding="18,14">
+                <StackPanel>
+                    <TextBlock Text="All time" Style="{StaticResource Caption}" />
+                    <TextBlock x:Name="AllText" Style="{StaticResource BigNumber}" FontSize="24" Margin="0,4,0,0" />
+                </StackPanel>
+            </ui:Card>
+        </UniformGrid>
+
+        <ui:Card Margin="0,12,0,0" Padding="18,14">
+            <StackPanel>
+                <DockPanel>
+                    <ComboBox x:Name="RangeBox" DockPanel.Dock="Right" Width="170" SelectedIndex="1"
+                              SelectionChanged="Range_Changed">
+                        <ComboBoxItem Content="Today by hour" />
+                        <ComboBoxItem Content="Last 7 days" />
+                        <ComboBoxItem Content="Last 30 days" />
+                        <ComboBoxItem Content="Last 12 months" />
+                    </ComboBox>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="8" Height="8" Fill="{StaticResource DownBrush}" />
+                        <TextBlock Text=" Download     " Style="{StaticResource Caption}" />
+                        <Ellipse Width="8" Height="8" Fill="{StaticResource UpBrush}" />
+                        <TextBlock Text=" Upload" Style="{StaticResource Caption}" />
+                        <TextBlock x:Name="RangeTotal" Style="{StaticResource Caption}" Margin="24,0,0,0" />
+                    </StackPanel>
+                </DockPanel>
+                <local:Chart x:Name="BarChart" Bars="True" Height="260" Margin="0,14,0,0" />
+            </StackPanel>
+        </ui:Card>
+
+        <TextBlock Text="Monthly data limit" Style="{StaticResource Section}" />
+        <ui:Card Padding="18,14">
+            <StackPanel>
+                <TextBlock x:Name="CapText" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                <ProgressBar x:Name="CapBar" Height="6" Margin="0,10,0,6" Maximum="1" />
+                <TextBlock x:Name="CapSub" Style="{StaticResource Caption}" />
+            </StackPanel>
+        </ui:Card>
+    </StackPanel>
+</Page>
